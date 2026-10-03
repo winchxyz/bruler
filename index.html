@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Brûler d'Amour — коллекция</title>
+  <meta name="description" content="Brûler d'Amour — коллекция одежды на 3D-рейле: выбирайте вещь, смотрите наличие и размеры. Шоурум в Москве, 2-я Бауманская, 9/23с3.">
+  <meta name="theme-color" content="#f1f0ec">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+  <!-- Sharing (absolute URLs: crawlers need them) -->
+  <link rel="canonical" href="https://winchxyz.github.io/bruler/">
+  <meta property="og:url" content="https://winchxyz.github.io/bruler/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Brûler d'Amour">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="Brûler d'Amour — коллекция">
+  <meta property="og:description" content="Коллекция одежды на 3D-рейле: выбирайте вещь, смотрите наличие и размеры. Шоурум в Москве.">
+  <meta property="og:image" content="https://winchxyz.github.io/bruler/assets/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Brûler d'Amour — рейл с вещами новой коллекции">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Brûler d'Amour — коллекция">
+  <meta name="twitter:description" content="Коллекция одежды на 3D-рейле: выбирайте вещь, смотрите наличие и размеры.">
+  <meta name="twitter:image" content="https://winchxyz.github.io/bruler/assets/og.jpg">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": "Brûler d'Amour",
+        "url": "https://bruler.ru",
+        "email": "support@bruler.ru",
+        "sameAs": [
+          "https://www.instagram.com/bruler.d.amour",
+          "https://t.me/bruler_d_amour",
+          "https://youtube.com/@brulerdamour"
+        ]
+      },
+      {
+        "@type": "ClothingStore",
+        "name": "Brûler d'Amour",
+        "url": "https://bruler.ru",
+        "email": "support@bruler.ru",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "2-я Бауманская ул., 9/23с3",
+          "addressLocality": "Москва",
+          "addressCountry": "RU"
+        },
+        "openingHoursSpecification": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+          "opens": "12:00",
+          "closes": "22:00"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- Decide about the intro before first paint: once per session, never on ?still / ?nointro / deep links -->
+  <script>
+    (function () {
+      var d = document.documentElement;
+      d.classList.add('js');
+      try {
+        if (!/[?&](still|nointro)\b/.test(location.search) && !location.hash && !(window.pageYOffset > 0) && !sessionStorage.getItem('bruler:intro')) {
+          d.classList.add('intro-on');
+          setTimeout(function () { d.classList.remove('intro-on'); }, 6000); // safety net if the module never runs
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/cloakroom.css">
+  <link rel="stylesheet" href="css/extras.css">
+  <script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js" } }</script>
+</head>
+<body class="home">
+  <div class="intro" id="intro" aria-hidden="true">
+    <div class="intro__veil"></div>
+    <div class="intro__mark">
+      <span class="intro__clip"><span class="intro__logo"></span></span>
+      <i class="intro__line"></i>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <nav class="topbar__side">
+      <a href="index.html#about">О бренде</a>
+      <a href="#top" data-nav="collection">Коллекция</a>
+    </nav>
+    <a class="topbar__logo" href="index.html" aria-label="Brûler d'Amour"><img src="assets/logo.svg" alt="Brûler d'Amour" width="160" height="16"></a>
+    <nav class="topbar__side topbar__side--right">
+      <a href="#showroom">Шоурум</a>
+      <button class="topbar__cart" type="button">Корзина <span data-count="cart">0</span></button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="stage" id="top">
+      <div id="cloakroom" class="cloakroom"></div>
+      <nav class="tabs" id="tabs" role="tablist" aria-label="Категории"></nav>
+      <div class="stage__cta"><button class="pill" type="button" id="cta">Смотреть наличие</button></div>
+      <a class="marquee" href="https://bruler.ru/collection" target="_blank" rel="noopener" aria-label="Новая коллекция на bruler.ru">
+        <div class="marquee__track">
+        <span>НОВАЯ КОЛЛЕКЦИЯ</span><i aria-hidden="true"></i><span>БЕСПЛАТНАЯ ДОСТАВКА ОТ 20&nbsp;000&nbsp;₽</span><i aria-hidden="true"></i><span>ПРОМОКОД WELCOME10 НА ПЕРВЫЙ ЗАКАЗ</span><i aria-hidden="true"></i><span>МОСКВА, 2-Я БАУМАНСКАЯ, 9/23С3</span><i aria-hidden="true"></i><span aria-hidden="true">НОВАЯ КОЛЛЕКЦИЯ</span><i aria-hidden="true"></i><span aria-hidden="true">БЕСПЛАТНАЯ ДОСТАВКА ОТ 20&nbsp;000&nbsp;₽</span><i aria-hidden="true"></i><span aria-hidden="true">ПРОМОКОД WELCOME10 НА ПЕРВЫЙ ЗАКАЗ</span><i aria-hidden="true"></i><span aria-hidden="true">МОСКВА, 2-Я БАУМАНСКАЯ, 9/23С3</span><i aria-hidden="true"></i><span aria-hidden="true">НОВАЯ КОЛЛЕКЦИЯ</span><i aria-hidden="true"></i><span aria-hidden="true">БЕСПЛАТНАЯ ДОСТАВКА ОТ 20&nbsp;000&nbsp;₽</span><i aria-hidden="true"></i><span aria-hidden="true">ПРОМОКОД WELCOME10 НА ПЕРВЫЙ ЗАКАЗ</span><i aria-hidden="true"></i><span aria-hidden="true">МОСКВА, 2-Я БАУМАНСКАЯ, 9/23С3</span><i aria-hidden="true"></i><span aria-hidden="true">НОВАЯ КОЛЛЕКЦИЯ</span><i aria-hidden="true"></i><span aria-hidden="true">БЕСПЛАТНАЯ ДОСТАВКА ОТ 20&nbsp;000&nbsp;₽</span><i aria-hidden="true"></i><span aria-hidden="true">ПРОМОКОД WELCOME10 НА ПЕРВЫЙ ЗАКАЗ</span><i aria-hidden="true"></i><span aria-hidden="true">МОСКВА, 2-Я БАУМАНСКАЯ, 9/23С3</span><i aria-hidden="true"></i>
+        </div>
+      </a>
+    </section>
+
+    <!-- Manifesto -->
+    <section id="about" class="sec manifesto">
+      <div class="sec__head reveal">
+        <p class="eyebrow">О бренде</p>
+        <a class="ul sec__more" href="https://bruler.ru/about_brand" target="_blank" rel="noopener">Читать на bruler.ru</a>
+      </div>
+      <h2 class="manifesto__text" data-lines>
+        <span class="ln"><span>Brûler d’Amour&nbsp;—</span></span>
+        <span class="ln ln--2"><span>гореть <em>любовью.</em></span></span>
+        <span class="ln"><span>Одежда, чтобы быть собой.</span></span>
+      </h2>
+      <div class="manifesto__body reveal">
+        <p>По-французски название значит «гореть любовью» — это чувство наполняет цветом и смыслом каждый день. Мы делаем вещи, которые хочется носить каждый день: не ради логотипов, а ради самовыражения.</p>
+        <p>Небольшие тиражи, плотный дышащий хлопок, ручная отделка. Качество мы контролируем сами — от замысла до последнего шва.</p>
+      </div>
+    </section>
+
+    <!-- Showroom -->
+    <section id="showroom" class="sec showroom">
+      <h2 class="showroom__title reveal">Шоурум</h2>
+      <dl class="showroom__list">
+        <div class="showroom__row reveal">
+          <dt>Адрес</dt>
+          <dd>г. Москва,<br>2-я Бауманская, 9/23с3</dd>
+        </div>
+        <div class="showroom__row reveal">
+          <dt>Часы работы</dt>
+          <dd>ежедневно<br>12:00–22:00</dd>
+        </div>
+        <div class="showroom__row reveal">
+          <dt>Сейчас</dt>
+          <dd><span class="status" id="status" data-state="unknown"><i class="status__dot" aria-hidden="true"></i><span class="status__text"><span>Часы работы</span><span class="status__sub">12:00–22:00</span></span></span></dd>
+        </div>
+      </dl>
+      <div class="showroom__actions reveal">
+        <a class="pill pill--solid" id="route" href="https://yandex.ru/maps/?text=%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C%202-%D1%8F%20%D0%91%D0%B0%D1%83%D0%BC%D0%B0%D0%BD%D1%81%D0%BA%D0%B0%D1%8F%2C%209%2F23%D1%813" target="_blank" rel="noopener">Построить маршрут</a>
+        <a class="ul" href="https://bruler.ru/contacts" target="_blank" rel="noopener">Все контакты</a>
+      </div>
+    </section>
+
+    <!-- Social + service -->
+    <section id="contacts" class="sec service">
+      <div class="service__lead reveal">
+        <p class="eyebrow">Новые дропы</p>
+        <p class="service__headline">Вещи выходят небольшими тиражами&nbsp;— узнавайте о&nbsp;новых первыми.</p>
+        <a class="pill pill--solid" href="https://t.me/bruler_d_amour" target="_blank" rel="noopener">Подписаться</a>
+      </div>
+      <div class="service__cols">
+        <nav class="service__col reveal" aria-label="Соцсети">
+          <h3>Мы в сети</h3>
+          <ul>
+            <li><a class="ul" href="https://www.instagram.com/bruler.d.amour" target="_blank" rel="noopener">Instagram</a></li>
+            <li><a class="ul" href="https://t.me/bruler_d_amour" target="_blank" rel="noopener">Telegram</a></li>
+            <li><a class="ul" href="https://youtube.com/@brulerdamour" target="_blank" rel="noopener">YouTube</a></li>
+          </ul>
+        </nav>
+        <nav class="service__col reveal" aria-label="Покупателям">
+          <h3>Покупателям</h3>
+          <ul>
+            <li><a class="ul" href="https://bruler.ru/delivery" target="_blank" rel="noopener">Доставка</a></li>
+            <li><a class="ul" href="https://bruler.ru/payment" target="_blank" rel="noopener">Оплата</a></li>
+            <li><a class="ul" href="https://bruler.ru/refund" target="_blank" rel="noopener">Обмен и возврат</a></li>
+            <li><a class="ul" href="https://bruler.ru/contacts" target="_blank" rel="noopener">Контакты</a></li>
+          </ul>
+        </nav>
+        <div class="service__col reveal">
+          <h3>Связаться</h3>
+          <ul>
+            <li><a class="ul" href="mailto:support@bruler.ru">support@bruler.ru</a></li>
+            <li><a class="ul" href="https://t.me/bruler_support" target="_blank" rel="noopener">Поддержка в Telegram</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot" data-cursor-light>
+    <div class="foot__inner">
+      <div class="foot__mark-wrap reveal"><span class="foot__mark" role="img" aria-label="Brûler d'Amour"></span></div>
+      <div class="foot__meta">
+        <p>© <span id="year">2026</span> Brûler d’Amour</p>
+        <p>Сайт-витрина. Покупка на&nbsp;<a class="ul" href="https://bruler.ru" target="_blank" rel="noopener">bruler.ru</a></p>
+        <a class="ul" href="#top" data-nav="collection">Наверх</a>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="js/intro.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

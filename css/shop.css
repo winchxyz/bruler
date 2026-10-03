@@ -1,0 +1,158 @@
+/* Shop layer: cart drawer, size sheet, flying garment, fabric loupe.
+   Restrained and tactile: paper, ink, hairlines. Only transform / opacity animate. No backdrop blur. */
+
+/* ---------- shared: side panel scaffold ---------- */
+.cart, .sheet { position: fixed; inset: 0; display: none; }
+.cart { z-index: 90; }
+.sheet { z-index: 70; }
+.cart.is-on, .sheet.is-on { display: block; }
+.cart__veil, .sheet__veil { position: absolute; inset: 0; background: rgba(14, 14, 16, 0.36); opacity: 0; transition: opacity 0.5s var(--ease); }
+.cart.is-in .cart__veil, .sheet.is-in .sheet__veil { opacity: 1; }
+.cart__panel, .sheet__panel {
+  position: absolute; top: 0; right: 0; bottom: 0; display: flex; flex-direction: column; overflow: hidden;
+  background: var(--paper); color: var(--ink); outline: none;
+  box-shadow: -1px 0 0 rgba(14, 14, 16, 0.1), -30px 0 80px rgba(14, 14, 16, 0.1);
+  transform: translate3d(100%, 0, 0); transition: transform 0.6s var(--ease); will-change: transform;
+}
+.cart__panel { width: min(440px, 100vw); }
+.sheet__panel { width: min(680px, 100vw); }
+.cart.is-in .cart__panel, .sheet.is-in .sheet__panel { transform: none; }
+.cart__head, .sheet__head {
+  flex: none; height: var(--header-h); display: flex; align-items: center; justify-content: space-between; padding: 0 12px 0 24px;
+  border-bottom: 1px solid rgba(14, 14, 16, 0.12);
+}
+.cart__title, .sheet__title { margin: 0; font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
+.cart__n { margin-left: 2px; color: var(--grey); }
+.cart__x, .sheet__x { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; transition: background 0.3s var(--ease), color 0.3s var(--ease); }
+.cart__x:hover, .sheet__x:hover { background: var(--ink); color: #fff; }
+.cart__x:focus-visible, .sheet__x:focus-visible, .cart button:focus-visible, .sheet button:focus-visible, .cart a:focus-visible { outline: 2px solid var(--new); outline-offset: 2px; }
+
+/* peek: no veil, no lock; the drawer is a quiet notice that leaves by itself */
+.cart.is-peek { pointer-events: none; }
+.cart.is-peek .cart__veil { display: none; }
+.cart.is-peek .cart__panel { pointer-events: auto; }
+
+/* ---------- cart views ---------- */
+.cart__views { position: relative; flex: 1; min-height: 0; }
+.cart__view {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  transition: transform 0.55s var(--ease), opacity 0.4s var(--ease), visibility 0s;
+}
+.cart__view--ck { transform: translate3d(28px, 0, 0); opacity: 0; visibility: hidden; transition: transform 0.55s var(--ease), opacity 0.4s var(--ease), visibility 0s 0.55s; }
+.cart__panel.is-ck .cart__view--cart { transform: translate3d(-28px, 0, 0); opacity: 0; visibility: hidden; transition: transform 0.55s var(--ease), opacity 0.4s var(--ease), visibility 0s 0.55s; }
+.cart__panel.is-ck .cart__view--ck { transform: none; opacity: 1; visibility: visible; transition: transform 0.55s var(--ease), opacity 0.4s var(--ease), visibility 0s; }
+.cart__body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 4px 24px 8px; }
+
+/* lines */
+.lines { list-style: none; margin: 0; padding: 0; }
+.line {
+  display: grid; grid-template-columns: 76px 1fr auto; gap: 16px; padding: 18px 0; border-bottom: 1px solid rgba(14, 14, 16, 0.1);
+  transition: opacity 0.24s ease, transform 0.3s var(--ease);
+}
+.line.is-new { animation: line-in 0.7s var(--ease) both; }
+.line.is-out { opacity: 0; transform: translateX(18px); }
+@keyframes line-in { from { opacity: 0; transform: translateY(10px); } }
+.line__img { display: block; width: 76px; height: 92px; background: rgba(14, 14, 16, 0.045); }
+.line__img img { width: 100%; height: 100%; object-fit: contain; padding: 7px; }
+.line__main { min-width: 0; display: flex; flex-direction: column; }
+.line__name { margin: 0; font-size: 13px; font-weight: 500; line-height: 1.35; letter-spacing: 0.005em; }
+.line__meta { margin: 3px 0 0; font-size: 12px; color: var(--grey); }
+.line__qty { margin-top: auto; display: inline-flex; align-items: center; align-self: flex-start; height: 30px; box-shadow: inset 0 0 0 1px rgba(14, 14, 16, 0.2); border-radius: 999px; }
+.line__qty button { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; transition: background 0.25s, color 0.25s, opacity 0.25s; }
+.line__qty button:hover:not(:disabled) { background: var(--ink); color: #fff; }
+.line__qty button:disabled { opacity: 0.25; cursor: default; }
+.line__q { min-width: 20px; text-align: center; font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.line__side { display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; }
+.line__price { margin: 0; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.line__rm { width: 30px; height: 30px; margin: 0 -7px -4px 0; display: grid; place-items: center; border-radius: 50%; color: var(--grey); transition: color 0.25s, background 0.25s; }
+.line__rm:hover { color: var(--ink); background: rgba(14, 14, 16, 0.07); }
+
+/* footer */
+.cart__foot { flex: none; padding: 20px 24px 24px; border-top: 1px solid rgba(14, 14, 16, 0.12); background: var(--paper); }
+.ship__txt { margin: 0 0 9px; font-size: 12px; color: #55555a; }
+.ship__txt b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.ship__bar { height: 2px; background: rgba(14, 14, 16, 0.12); overflow: hidden; }
+.ship__bar i { display: block; height: 100%; background: var(--ink); transform-origin: 0 50%; transition: transform 0.7s var(--ease); }
+.promo { margin: 14px 0 0; font-size: 12px; color: #55555a; }
+.promo__code {
+  font-weight: 600; letter-spacing: 0.06em; color: var(--ink);
+  background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; transition: opacity 0.3s;
+}
+.promo__code:hover { opacity: 0.6; }
+.promo__code.is-done { background-size: 0 1px; color: #2f9461; }
+.sum { display: flex; align-items: baseline; justify-content: space-between; margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(14, 14, 16, 0.1); }
+.sum span { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
+.sum b { font-size: 19px; font-weight: 500; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.cart__note { margin: 8px 0 16px; font-size: 11.5px; line-height: 1.5; color: var(--grey); }
+.cart__go { width: 100%; height: 50px; font-size: 11px; }
+
+/* empty */
+.cart.is-empty .cart__foot { display: none; }
+.empty { height: 100%; min-height: 280px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 12px 40px; }
+.empty__t { margin: 0; font-size: clamp(22px, 2.4vw, 28px); font-weight: 300; letter-spacing: -0.02em; }
+.empty__s { margin: 10px 0 26px; font-size: 13px; color: var(--grey); }
+
+/* undo toast: sits under the header, never over the buttons */
+.cart__undo {
+  position: absolute; left: 16px; right: 16px; top: calc(var(--header-h) + 10px); z-index: 3; display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  padding: 12px 14px 12px 16px; border-radius: 10px; background: var(--ink); color: #fff; font-size: 12.5px; line-height: 1.35;
+  opacity: 0; transform: translateY(-8px); pointer-events: none; transition: opacity 0.35s var(--ease), transform 0.5s var(--ease);
+}
+.cart__undo.is-on { opacity: 1; transform: none; pointer-events: auto; }
+.cart__undo span { min-width: 0; }
+.cart__undo button { flex: none; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; padding-bottom: 1px; }
+
+/* checkout step */
+.ck__scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 18px 24px 24px; }
+.ck__back { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 22px -2px; font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: #55555a; transition: color 0.3s; }
+.ck__back:hover { color: var(--ink); }
+.ck__title { margin: 0; font-size: clamp(22px, 2.2vw, 26px); font-weight: 400; line-height: 1.2; letter-spacing: -0.02em; text-wrap: balance; }
+.ck__lead { margin: 12px 0 22px; font-size: 13px; line-height: 1.65; color: #55555a; }
+.ck__list { list-style: none; margin: 0; padding: 0; border-top: 1px solid rgba(14, 14, 16, 0.1); }
+.ck__row { display: grid; grid-template-columns: 52px 1fr; gap: 4px 16px; padding: 16px 0; border-bottom: 1px solid rgba(14, 14, 16, 0.1); }
+.ck__row img { grid-row: span 2; width: 52px; height: 64px; object-fit: contain; padding: 4px; background: rgba(14, 14, 16, 0.045); }
+.ck__gone { margin: 4px 0 0; font-size: 11.5px; color: var(--red); }
+.ck__open {
+  grid-column: 2; align-self: end; justify-self: start; display: inline-flex; align-items: center; gap: 7px; margin-top: 8px;
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; padding-bottom: 2px; transition: opacity 0.3s;
+}
+.ck__open:hover { background-size: 0 1px; background-position: 100% 100%; opacity: 0.6; }
+.promo--ck { margin-top: 20px; }
+.ck__foot { flex: none; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 18px 24px 22px; border-top: 1px solid rgba(14, 14, 16, 0.12); font-size: 12px; color: #55555a; }
+.ck__foot a { position: relative; color: var(--ink); font-weight: 500; background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; padding-bottom: 1px; transition: opacity 0.3s; }
+.ck__foot a:hover { opacity: 0.6; }
+
+/* ---------- size sheet ---------- */
+.sheet__body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 22px 24px 32px; }
+.sheet__name { margin: 0 0 18px; font-size: 14px; font-weight: 500; }
+.sheet__name span { margin-left: 10px; font-weight: 400; color: var(--grey); }
+.sheet__chart { overflow-x: auto; overscroll-behavior-x: contain; margin: 0 -24px; padding: 0 24px; scrollbar-width: thin; }
+.sheet__chart img { display: block; width: 100%; height: auto; min-width: 560px; }
+.sheet__hint { display: none; margin: 8px 0 0; font-size: 11px; color: var(--grey); }
+.sheet__models { margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(14, 14, 16, 0.12); }
+.sheet__models ul { list-style: none; margin: 0; padding: 0; }
+.sheet__models li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 14px; padding: 9px 0; border-bottom: 1px solid rgba(14, 14, 16, 0.08); font-size: 13px; }
+.sheet__models li b { min-width: 76px; font-weight: 600; }
+.sheet__models li span { color: #55555a; }
+@media (max-width: 699px) {
+  .sheet__hint { display: block; }
+  .sheet__chart img { min-width: 640px; }
+  .cart__head, .sheet__head { padding-left: 18px; }
+  .cart__body, .ck__scroll, .cart__foot, .ck__foot, .sheet__body { padding-left: 18px; padding-right: 18px; }
+  .sheet__chart { margin: 0 -18px; padding: 0 18px; }
+}
+
+/* ---------- flying garment ---------- */
+.fly { position: fixed; z-index: 95; pointer-events: none; will-change: transform; }
+.fly__in { width: 100%; height: 100%; transform-origin: 50% 50%; will-change: transform, opacity; filter: none; }
+.fly__in img { width: 100%; height: 100%; object-fit: contain; }
+
+/* ---------- fabric loupe ---------- */
+.loupe {
+  position: fixed; left: 0; top: 0; z-index: 46; width: 160px; height: 160px; border-radius: 50%; pointer-events: none;
+  background-color: #ecebe6; background-repeat: no-repeat; will-change: transform, opacity;
+  box-shadow: 0 0 0 1px rgba(14, 14, 16, 0.14), 0 14px 40px rgba(14, 14, 16, 0.22), inset 0 0 0 5px rgba(241, 240, 236, 0.5);
+  opacity: 0; transition: opacity 0.22s var(--ease);
+}
+.loupe.is-on { opacity: 1; }
